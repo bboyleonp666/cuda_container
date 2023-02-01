@@ -8,7 +8,7 @@ GPU: RTX 3080ti
 This repository is the installer of docker and nvidia-container for Ubuntu 20.04.  
 In order to create a container environment for CUDA support in deep learning.  
 ```
-bash setup_cuda_container.sh
+bash install.sh
 ```
 
 Reference:  
@@ -18,25 +18,57 @@ Reference:
 
 To test the GPU support
 ```
-sudo docker run --rm --gpus all nvidia/cuda:11.6.2-base-ubuntu20.04 nvidia-smi
+bash test_gpu.sh
+```
+You should see output like below if your installation works correctly.
+```
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA GeForce ...  Off  | 00000000:01:00.0 Off |                  N/A |
+|  0%   35C    P8    25W / 400W |  10980MiB / 12288MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
++-----------------------------------------------------------------------------+
 ```
 
 **Note:** If you would like to make your current user running `docker` command without `sudo`
 ```
 sudo usermod -aG docker $(whoami)
-// sudo reboot 0
+# sudo reboot 0
 ```
-Some system need to reboot to get the configuration take effect.
 
 ## Quick Start
 To start a container for jupyter lab with conda installed, I personally recommend use [iot-salzburg/gpu-jupyter](https://github.com/iot-salzburg/gpu-jupyter) container images.  
-If you do not care about the details, simply modify the following command according to your need.
+1. Modify the configuration in `run.sh`
 ```
-docker run --gpus all -d -it -p <port>:8888 -v $(pwd)/<directory>:/home/jovyan/work -e GRANT_SUDO=yes -e JUPYTER_ENABLE=yes --user root cschranz/gpu-jupyter:v1.4_cuda-11.2_ubuntu-20.04_python-only
+# docker image version
+VERSION=gpu-jupyter:v1.4_cuda-11.6_ubuntu-20.04_python-only
+
+# exposed port
+PORT=8888
+
+# mounting directory
+MOUNT_DIR=$(pwd)
+
+# name of the container
+NAME=CUDA_JUPYTER
+```
+2. Start your container
+```
+bash run.sh
 ```
 
-For example, I have a directory named `work` under my current working directory, then I can mount it to my container.  
-Since jupyter lab is a web service, so you can map the port to your host by modifying `<port>`.  
 If you are opening the service in remote machine, you can forward the port using ssh.
 ```
 ssh -NfL <local port>:localhost:<remote port> <username>@<ip address>
@@ -47,8 +79,8 @@ And open your browser with url `localhost:<port>`
 **Example:**
 ```
 # On remote machine
-user@remote_machine ~$ ls -F    # mydir/
-user@remote_machine ~$ docker run --docker run --gpus all -d -it -p 9999:8888 -v $(pwd)/mydir:/home/jovyan/work -e GRANT_SUDO=yes -e JUPYTER_ENABLE=yes --user root cschranz/gpu-jupyter:v1.4_cuda-11.2_ubuntu-20.04_python-only
+user@remote_machine ~$ cd my_dir
+user@remote_machine ~$ bash run.sh  # suppose port exposed on 9999
 
 # On local machine
 local_user@local_machine ~$ ssh -NfL 10000:localhost:9999 user@<IP>
