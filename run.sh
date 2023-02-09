@@ -10,10 +10,10 @@ usage() {
     echo "To start the CUDA container with Jupyter"
     echo "  $ bash $0 [-s] [-c]"
     echo
-    echo "    <no option>  To start the container"
-    echo "    -s           To stop the container"
-    echo "    -c           To stop and remove the container"
-    echo "    -t           To obtain the Jupyter token for login"
+    echo "    -r    To start the container"
+    echo "    -s    To stop the container"
+    echo "    -c    To stop and remove the container"
+    echo "    -t    To obtain the Jupyter token for login"
 }
 
 start() {
@@ -40,30 +40,29 @@ remove() {
 }
 
 get_token() {
-    TOKEN=$(sudo docker logs $NAME 2> >(grep token=) > head -n 1 | sed 's/.*token=//')
+    TOKEN=$(sudo docker logs $NAME 2> /dev/fd/1 1> /dev/null | grep 'token=' | head -n 1 | sed 's/.*token=//')
 }
 
-token() {
+show_token() {
     get_token
     echo "Your jupyter token is: $TOKEN"
 }
 
-# if no option given, start the container
-if [[ $1 == '' ]]; then
-    start
-    while [[ -z ${TOKEN+x} ]]; do
-        get_token
-        sleep 1
-    done
-    token
-    exit 0
-fi
-
-# if option is given, execute the option
-while getopts "hsct" argv; do
+[[ $1 == '' ]] && usage && exit 0
+while getopts "hrsct" argv; do
     case $argv in
         h )
             usage
+            exit 0
+            ;;
+
+        r )
+            start
+            while [[ -z ${TOKEN+x} ]]; do
+                get_token
+                sleep 1
+            done
+            show_token
             exit 0
             ;;
 
@@ -79,7 +78,7 @@ while getopts "hsct" argv; do
             ;;
 
         t )
-            token
+            show_token
             exit 0
             ;;
 

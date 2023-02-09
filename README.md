@@ -66,7 +66,7 @@ NAME=CUDA_JUPYTER
 ```
 2. Start your container
 ```
-bash run.sh
+bash run.sh -r
 ```
 
 If you are opening the service in remote machine, you can forward the port using ssh.
