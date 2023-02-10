@@ -1,6 +1,6 @@
 # Docker installation
 
-## Requirement
+## Environment
 OS: Ubuntu 20.04  
 GPU: RTX 3080ti
 
@@ -53,7 +53,7 @@ To start a container for jupyter lab with conda installed, I personally recommen
 1. Modify the configuration in `run.sh`
 ```
 # docker image version
-VERSION=gpu-jupyter:v1.4_cuda-11.6_ubuntu-20.04_python-only
+IMAGE=cschranz/gpu-jupyter:v1.4_cuda-11.6_ubuntu-20.04_python-only
 
 # exposed port
 PORT=8888
