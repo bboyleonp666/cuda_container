@@ -52,8 +52,11 @@ sudo usermod -aG docker $(whoami)
 To start a container for jupyter lab with conda installed, I personally recommend use [iot-salzburg/gpu-jupyter](https://github.com/iot-salzburg/gpu-jupyter) container images.  
 1. Modify the configuration in `run.sh`
 ```
+# docker image
+IMAGE=pytorch-lightning
+
 # docker image version
-IMAGE=cschranz/gpu-jupyter:v1.4_cuda-11.6_ubuntu-20.04_python-only
+VERSION=1.8.6
 
 # exposed port
 PORT=8888
@@ -62,7 +65,7 @@ PORT=8888
 MOUNT_DIR=$(pwd)
 
 # name of the container
-NAME=CUDA_JUPYTER
+NAME=lightning
 ```
 2. Start your container
 ```
