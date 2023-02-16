@@ -56,8 +56,9 @@ while getopts "hrsct" argv; do
 
         r )
             start
-            while [[ -z ${TOKEN+x} ]]; do
+            for i in $(seq 1 5); do
                 get_token
+                [[ ! $TOKEN == '' ]] && break
                 sleep 1
             done
             show_token
