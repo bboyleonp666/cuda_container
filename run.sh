@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # Basic Configuration
-IMAGE=pytorch-lightning
-VERSION=1.8.6
+IMAGE=pyg-lightning
+VERSION=1.0
 EXPOSE_PORT=8888
 WORKING_DIR=$(pwd)
-NAME=lightning
+NAME=pyg_pl
 
 usage() {
     echo "To start the CUDA container with Jupyter"
-    echo "  $ bash $0 [-s] [-c]"
+    echo "  $ bash $0 [-r] [-s] [-c] [-t]"
     echo
     echo "    -r    To start the container"
     echo "    -s    To stop the container"
