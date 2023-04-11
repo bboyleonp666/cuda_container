@@ -3,12 +3,14 @@
 ## Environment
 OS: Ubuntu 20.04  
 GPU: RTX 3080ti
+  
+> Verified OS versions: Ubuntu 20.04, 22.04
 
 ## Installation
 This repository is the installer of docker and nvidia-container for Ubuntu 20.04.  
 In order to create a container environment for CUDA support in deep learning.  
 ```
-bash install.sh
+bash install.sh [nvidia-driver-version]
 ```
 
 Reference:  
@@ -45,7 +47,7 @@ You should see output like below if your installation works correctly.
 **Note:** If you would like to make your current user running `docker` command without `sudo`
 ```
 sudo usermod -aG docker $(whoami)
-# sudo reboot 0
+newgrp docker
 ```
 
 ## Quick Start
