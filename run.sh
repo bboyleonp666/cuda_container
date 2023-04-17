@@ -1,15 +1,17 @@
 #!/bin/bash
 
 # Basic Configuration
-IMAGE=cschranz/gpu-jupyter:v1.4_cuda-11.6_ubuntu-20.04_python-only
+IMAGE=pyg-lightning
+VERSION=1.0
 EXPOSE_PORT=8888
-MOUNT_DIR=$(pwd)
-NAME=CUDA_JUPYTER
+WORKING_DIR=$(pwd)
+NAME=pyg_pl
 
 usage() {
     echo "To start the CUDA container with Jupyter"
-    echo "  $ bash $0 [-s] [-c]"
+    echo "  $ bash $0 [-h] [-r] [-s] [-c] [-t]"
     echo
+    echo "    -h    Show help and exit"
     echo "    -r    To start the container"
     echo "    -s    To stop the container"
     echo "    -c    To stop and remove the container"
@@ -21,12 +23,9 @@ start() {
     docker run -d \
         --gpus all \
         -p $EXPOSE_PORT:8888 \
-        -v $MOUNT_DIR:/home/jovyan/work \
-        -e GRANT_SUDO=yes \
-        -e JUPYTER_ENABLE=yes \
-        --user root \
+        -v $WORKING_DIR:/workspace/research \
         --name=$NAME \
-        $IMAGE > /dev/null
+        $IMAGE:$VERSION > /dev/null
 }
 
 stop() {
@@ -40,7 +39,7 @@ remove() {
 }
 
 get_token() {
-    TOKEN=$(sudo docker logs $NAME 2> /dev/fd/1 1> /dev/null | grep 'token=' | head -n 1 | sed 's/.*token=//')
+    TOKEN=$(docker logs $NAME 2> /dev/fd/1 1> /dev/null | grep 'token=' | head -n 1 | sed 's/.*token=//')
 }
 
 show_token() {

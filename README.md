@@ -54,8 +54,11 @@ newgrp docker
 To start a container for jupyter lab with conda installed, I personally recommend use [iot-salzburg/gpu-jupyter](https://github.com/iot-salzburg/gpu-jupyter) container images.  
 1. Modify the configuration in `run.sh`
 ```
+# docker image name
+IMAGE=pyg-lightning
+
 # docker image version
-IMAGE=cschranz/gpu-jupyter:v1.4_cuda-11.6_ubuntu-20.04_python-only
+VERSION=1.0
 
 # exposed port
 PORT=8888
@@ -64,7 +67,7 @@ PORT=8888
 MOUNT_DIR=$(pwd)
 
 # name of the container
-NAME=CUDA_JUPYTER
+NAME=pyg_pl
 ```
 2. Start your container
 ```
@@ -82,10 +85,10 @@ And open your browser with url `localhost:<port>`
 ```
 # On remote machine
 user@remote_machine ~$ cd my_dir
-user@remote_machine ~$ bash run.sh  # suppose port exposed on 9999
+user@remote_machine ~$ bash run.sh  # suppose port exposed on 8888
 
 # On local machine
-local_user@local_machine ~$ ssh -NfL 10000:localhost:9999 user@<IP>
+local_user@local_machine ~$ ssh -NfL 10000:localhost:8888 user@<IP>
 # Open browser with URL: localhost:10000
 ```
 
