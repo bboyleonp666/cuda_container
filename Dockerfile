@@ -19,7 +19,9 @@ RUN pip install torch==1.13.1 torchvision torchaudio && \
     # package: jupyterlab
     pip install jupyterlab[all] -U && \
     # package: seaborn, angr, mlflow
-    pip install ipywidgets seaborn mlflow angr==9.2.32
+    pip install ipywidgets seaborn mlflow angr==9.2.32 \
+    # package: gensim, for Doc2Vec
+    pip install gensim
 
 RUN pip list | grep torch && \
     python -c 'import torch, pytorch_lightning as pl; print(torch.__version__); print(pl.__version__)' && \
